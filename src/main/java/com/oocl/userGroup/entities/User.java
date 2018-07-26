@@ -4,7 +4,9 @@ package com.oocl.userGroup.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "user")
@@ -19,7 +21,7 @@ public class User {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "users", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<Group> groups = new HashSet<>();
+    private List<Group> groups = new ArrayList<>();
 
     public User(Long id, String name) {
         this.id = id;
@@ -30,7 +32,11 @@ public class User {
     public User() {
     }
 
-    public Set<Group> getGroups() {
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public List<Group> getGroups() {
         return groups;
     }
 

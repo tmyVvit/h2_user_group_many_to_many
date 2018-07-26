@@ -4,7 +4,9 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -25,13 +27,13 @@ public class Group {
     @JoinTable(name = "user_group",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")})
-    private Set<User> users = new HashSet<>();
+    private List<User> users = new ArrayList<>();
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
@@ -65,6 +67,22 @@ public class Group {
 
     public void setCreate_date(ZonedDateTime create_date) {
         this.create_date = create_date;
+    }
+
+    public boolean exist(User user){
+        for(User u: users){
+            if(u.getId().equals(user.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean addUser(User user){
+        if(exist(user))
+            return false;
+        users.add(user);
+        return true;
     }
 
 }

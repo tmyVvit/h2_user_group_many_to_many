@@ -18,7 +18,7 @@ public class User {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Group> groups = new HashSet<>();
 
     public User(Long id, String name) {

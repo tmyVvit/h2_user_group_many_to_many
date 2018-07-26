@@ -21,7 +21,7 @@ public class Group {
     @CreatedDate
     private ZonedDateTime create_date = ZonedDateTime.now();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "user_group",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")})

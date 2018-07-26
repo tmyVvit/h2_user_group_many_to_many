@@ -43,4 +43,15 @@ public class GroupController {
         Group group = groupRepository.findById(groupID).orElseThrow(()->new ResourceNotFoundException("group not found"));
         return new GroupDTO(group);
     }
+
+    @Transactional
+    @PutMapping(path = "/{groupID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public GroupDTO updateGroupById(@PathVariable Long groupID, @RequestBody Group group){
+        Group groupFound = groupRepository.findById(groupID).orElseThrow(()->new ResourceNotFoundException("group not found"));
+        groupFound.setName(group.getName());
+        groupRepository.save(groupFound);
+        return new GroupDTO(groupFound);
+    }
+
+    
 }

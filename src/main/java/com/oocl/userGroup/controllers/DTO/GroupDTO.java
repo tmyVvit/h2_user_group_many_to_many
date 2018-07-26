@@ -1,7 +1,6 @@
 package com.oocl.userGroup.controllers.DTO;
 
 import com.oocl.userGroup.entities.Group;
-import com.oocl.userGroup.entities.User;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -11,13 +10,13 @@ public class GroupDTO {
     private final Long id;
     private final String name;
     private final ZonedDateTime create_date;
-    private final List<Long> usersId;
+    private final List<UserDTO> users;
 
     public GroupDTO(Group group){
         this.id = group.getId();
         this.name = group.getName();
         this.create_date = group.getCreate_date();
-        this.usersId = group.getUsers().stream().map(user -> user.getId()).collect(Collectors.toList());
+        this.users = group.getUsers().stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -32,7 +31,7 @@ public class GroupDTO {
         return create_date;
     }
 
-    public List<Long> getUsersId() {
-        return usersId;
+    public List<UserDTO> getUsers() {
+        return users;
     }
 }

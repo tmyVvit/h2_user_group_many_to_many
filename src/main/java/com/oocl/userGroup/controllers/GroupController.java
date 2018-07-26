@@ -5,12 +5,11 @@ import com.oocl.userGroup.entities.Group;
 import com.oocl.userGroup.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/groups")
@@ -27,5 +26,13 @@ public class GroupController {
     public GroupDTO addGroup(@RequestBody Group group){
         groupRepository.save(group);
         return new GroupDTO(group);
+    }
+
+    @Transactional
+    @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<GroupDTO> getAllGroups(){
+        List<GroupDTO> groupDTOS = new ArrayList<>();
+        groupRepository.findAll().stream().forEach(group -> groupDTOS.add(new GroupDTO(group)));
+        return groupDTOS;
     }
 }

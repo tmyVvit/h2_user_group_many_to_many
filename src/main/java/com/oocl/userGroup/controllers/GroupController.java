@@ -6,6 +6,7 @@ import com.oocl.userGroup.entities.User;
 import com.oocl.userGroup.exceptions.ResourceNotFoundException;
 import com.oocl.userGroup.repositories.GroupRepository;
 import com.oocl.userGroup.repositories.UserRepository;
+import org.aspectj.lang.annotation.DeclareError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +66,15 @@ public class GroupController {
         User user = userRepository.findById(userID).orElseThrow(()->new ResourceNotFoundException("user not exist"));
         group.addUser(user);
 
+        return new GroupDTO(group);
+    }
+
+    @Transactional
+    @DeleteMapping(path = "/{groupID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public GroupDTO deleteGroupById(@PathVariable Long groupID){
+        Group group = groupRepository.findById(groupID).orElseThrow(()->new ResourceNotFoundException("group not found"));
+        group.getUsers().forEach(user -> user.deleteGroup(groupID));
+        groupRepository.delete(group);
         return new GroupDTO(group);
     }
 }

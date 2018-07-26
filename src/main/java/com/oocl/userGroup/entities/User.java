@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Table(name = "user")
 @Entity
@@ -54,5 +55,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void deleteGroup(Long groupID) {
+        for(Group group: groups){
+            if(group.getId().equals(groupID)){
+                groups.remove(group);
+                break;
+            }
+        }
     }
 }

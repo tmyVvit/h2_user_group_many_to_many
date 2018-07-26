@@ -2,6 +2,7 @@ package com.oocl.userGroup.controllers;
 
 import com.oocl.userGroup.controllers.DTO.GroupDTO;
 import com.oocl.userGroup.entities.Group;
+import com.oocl.userGroup.exceptions.ResourceNotFoundException;
 import com.oocl.userGroup.repositories.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,7 +33,14 @@ public class GroupController {
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<GroupDTO> getAllGroups(){
         List<GroupDTO> groupDTOS = new ArrayList<>();
-        groupRepository.findAll().stream().forEach(group -> groupDTOS.add(new GroupDTO(group)));
+        groupRepository.findAll().forEach(group -> groupDTOS.add(new GroupDTO(group)));
         return groupDTOS;
+    }
+
+    @Transactional
+    @GetMapping(path = "/{groupID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public GroupDTO getGroupById(@PathVariable Long groupID){
+        Group group = groupRepository.findById(groupID).orElseThrow(()->new ResourceNotFoundException("group not found"));
+        return new GroupDTO(group);
     }
 }
